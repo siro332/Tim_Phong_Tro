@@ -15,6 +15,7 @@ class Body extends StatefulWidget {
 
 class _BodyState extends State<Body> {
   int currentPage = 0;
+  bool isVisible = false;
   List<Map<String, String>> splashData = [
     {"text": "Welcome to Tokyo", "image": "assets/images/splash_1.png"},
     {
@@ -40,6 +41,12 @@ class _BodyState extends State<Body> {
                   setState(() {
                     currentPage = value;
                   });
+                  if (currentPage == splashData.length - 1 &&
+                      isVisible == false) {
+                    setState(() {
+                      isVisible = true;
+                    });
+                  }
                 },
                 itemCount: splashData.length,
                 itemBuilder: (context, index) => SplashContent(
@@ -66,14 +73,18 @@ class _BodyState extends State<Body> {
                       Spacer(
                         flex: 3,
                       ),
-                      DefaultButton(
-                        text: "Continue",
-                        press: () async {
-                          await MysharedPreferences.instance
-                              .setBooleanValue("firstTimeOpen", true);
-                          Navigator.pushReplacementNamed(
-                              context, SignInScreen.routeName);
-                        },
+                      AnimatedOpacity(
+                        opacity: isVisible ? 1.0 : 0.0,
+                        duration: Duration(milliseconds: 200),
+                        child: DefaultButton(
+                          text: "Continue",
+                          press: () async {
+                            await MysharedPreferences.instance
+                                .setBooleanValue("secondTimeOpen", true);
+                            Navigator.pushReplacementNamed(
+                                context, SignInScreen.routeName);
+                          },
+                        ),
                       ),
                       Spacer(),
                     ],
