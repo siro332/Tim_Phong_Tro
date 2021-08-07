@@ -21,6 +21,7 @@ environment:
   sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
+  http: ^0.13.3
   flutter:
     sdk: flutter
 
@@ -31,6 +32,9 @@ dependencies:
   flutter_svg: ^0.22.0
   provider: ^5.0.0
   shared_preferences: ^2.0.6
+  font_awesome_flutter: ^9.1.0
+  flutter_spinkit: ^5.0.0
+  cached_network_image: ^3.1.0
 
 dev_dependencies:
   flutter_test:

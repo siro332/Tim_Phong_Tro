@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tim_phong_tro/components/custom_suffix_icon.dart';
 import 'package:tim_phong_tro/components/default_button.dart';
 import 'package:tim_phong_tro/components/form_error.dart';
 import 'package:tim_phong_tro/constants.dart';
+import 'package:tim_phong_tro/screens/forgot_password/forgot_password_screen.dart';
+import 'package:tim_phong_tro/screens/home/home_screen.dart';
+import 'package:tim_phong_tro/services/auth_services.dart';
 import 'package:tim_phong_tro/size_config.dart';
 
 class SignInForm extends StatefulWidget {
@@ -14,6 +18,8 @@ class SignInForm extends StatefulWidget {
 class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
+  bool isLoading = false;
+  bool isShowPass = false;
   String email = "";
   String password = "";
   @override
@@ -33,9 +39,13 @@ class _SignInFormState extends State<SignInForm> {
             Row(
               children: [
                 Spacer(),
-                Text(
-                  "Forgot Password",
-                  style: TextStyle(decoration: TextDecoration.underline),
+                GestureDetector(
+                  onTap: () => Navigator.pushNamed(
+                      context, ForgotPasswordScreen.routeName),
+                  child: Text(
+                    "Forgot Password",
+                    style: TextStyle(decoration: TextDecoration.underline),
+                  ),
                 )
               ],
             ),
@@ -43,23 +53,61 @@ class _SignInFormState extends State<SignInForm> {
             SizedBox(
               height: getProportionateScreenHeight(30),
             ),
-            DefaultButton(
-              text: "Sign In",
-              press: () {
-                if (_formKey.currentState!.validate()) {
-                  _formKey.currentState!.save();
-                }
-              },
-            ),
+            isLoading
+                ? DefaultButton(
+                    text: "Loading",
+                    press: () {},
+                  )
+                : DefaultButton(
+                    text: "Sign In",
+                    press: () async {
+                      setState(() {
+                        isLoading = true;
+                      });
+                      if (_formKey.currentState!.validate() &&
+                          errors.length <= 0) {
+                        _formKey.currentState!.save();
+                        String response = await AuthServices.signIn(
+                            this.email, this.password);
+                        if (response == kAccessToken) {
+                          Navigator.pushNamedAndRemoveUntil(
+                              context, HomeScreen.routeName, (route) => false);
+                        } else if (response == kWrongEmailPassword &&
+                            !errors.contains(kWrongEmailPassword)) {
+                          setState(() {
+                            errors.add(kWrongEmailPassword);
+                          });
+                        } else if (response == kNetworkError &&
+                            !errors.contains(kNetworkError)) {
+                          setState(() {
+                            errors.add(kNetworkError);
+                          });
+                        }
+                        setState(() {
+                          isLoading = false;
+                        });
+                      }
+                    }),
           ],
         ));
   }
 
   TextFormField buildPasswordFormField() {
     return TextFormField(
-      obscureText: true,
+      readOnly: this.isLoading,
+      obscureText: !this.isShowPass,
       onSaved: (newValue) => password = newValue!,
       onChanged: (value) {
+        if (errors.contains(kWrongEmailPassword)) {
+          setState(() {
+            errors.remove(kWrongEmailPassword);
+          });
+        }
+        if (errors.contains(kNetworkError)) {
+          setState(() {
+            errors.remove(kNetworkError);
+          });
+        }
         if (value.isNotEmpty && errors.contains(kPassNullError)) {
           setState(() {
             errors.remove(kPassNullError);
@@ -91,8 +139,19 @@ class _SignInFormState extends State<SignInForm> {
         labelText: "Password",
         hintText: "Enter Your Password",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: CustomSuffixIcon(
-          image: "assets/icons/Lock.svg",
+        suffixIcon: GestureDetector(
+          onTap: () {
+            setState(() {
+              isShowPass = !isShowPass;
+            });
+          },
+          child: isShowPass
+              ? CustomSuffixIcon(
+                  icon: FontAwesomeIcons.eyeSlash,
+                )
+              : CustomSuffixIcon(
+                  icon: FontAwesomeIcons.eye,
+                ),
         ),
       ),
     );
@@ -100,8 +159,19 @@ class _SignInFormState extends State<SignInForm> {
 
   TextFormField buildEmailFormField() {
     return TextFormField(
+      readOnly: this.isLoading,
       onSaved: (newValue) => email = newValue!,
       onChanged: (value) {
+        if (errors.contains(kWrongEmailPassword)) {
+          setState(() {
+            errors.remove(kWrongEmailPassword);
+          });
+        }
+        if (errors.contains(kNetworkError)) {
+          setState(() {
+            errors.remove(kNetworkError);
+          });
+        }
         if (value.isNotEmpty && errors.contains(kEmailNullError)) {
           setState(() {
             errors.remove(kEmailNullError);
@@ -133,7 +203,7 @@ class _SignInFormState extends State<SignInForm> {
         hintText: "Enter Your Email",
         floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: CustomSuffixIcon(
-          image: "assets/icons/Mail.svg",
+          icon: FontAwesomeIcons.envelope,
         ),
       ),
     );

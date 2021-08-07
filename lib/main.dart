@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tim_phong_tro/components/class/my_shared_preferences.dart';
+import 'package:tim_phong_tro/models/my_shared_preferences.dart';
 import 'package:tim_phong_tro/constants.dart';
 import 'package:tim_phong_tro/routes.dart';
-import 'package:tim_phong_tro/screens/sign_in/sign_in_screen.dart';
+import 'package:tim_phong_tro/screens/home/home_screen.dart';
 import 'package:tim_phong_tro/screens/splash/splash_screen.dart';
 
 bool isSecondTimeOpen = false;
@@ -30,7 +30,7 @@ class MyAppState extends State<MyApp> {
       title: 'Flutter Demo',
       theme: theme(),
       initialRoute:
-          isSecondTimeOpen ? SignInScreen.routeName : SplashScreen.routeName,
+          isSecondTimeOpen ? HomeScreen.routeName : SplashScreen.routeName,
       routes: routes,
     );
   }
@@ -47,7 +47,8 @@ ThemeData theme() {
               headline6: TextStyle(color: Color(0XFF8B8B8B), fontSize: 18))),
       inputDecorationTheme: inputDecorationTheme(),
       scaffoldBackgroundColor: Colors.white,
-      primarySwatch: Colors.green,
+      primarySwatch: Colors.lightBlue,
+      primaryColor: kPrimaryColor,
       fontFamily: "Muli",
       textTheme: TextTheme(
           bodyText1: TextStyle(color: kTextColor),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:tim_phong_tro/components/class/my_shared_preferences.dart';
+import 'package:tim_phong_tro/models/my_shared_preferences.dart';
 import 'package:tim_phong_tro/components/default_button.dart';
 import 'package:tim_phong_tro/constants.dart';
-import 'package:tim_phong_tro/screens/sign_in/sign_in_screen.dart';
+import 'package:tim_phong_tro/screens/home/home_screen.dart';
 import 'package:tim_phong_tro/screens/splash/components/splash_content.dart';
 import 'package:tim_phong_tro/size_config.dart';
 
@@ -82,7 +82,7 @@ class _BodyState extends State<Body> {
                             await MysharedPreferences.instance
                                 .setBooleanValue("secondTimeOpen", true);
                             Navigator.pushReplacementNamed(
-                                context, SignInScreen.routeName);
+                                context, HomeScreen.routeName);
                           },
                         ),
                       ),

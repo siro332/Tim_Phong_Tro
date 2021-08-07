@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tim_phong_tro/constants.dart';
 import 'package:tim_phong_tro/size_config.dart';
 
@@ -24,11 +25,17 @@ class DefaultButton extends StatelessWidget {
             backgroundColor: MaterialStateProperty.all<Color>(kPrimaryColor),
           ),
           onPressed: press,
-          child: Text(
-            text,
-            style: TextStyle(
-                fontSize: getProportionateScreenWidth(18), color: Colors.white),
-          )),
+          child: text == "Loading"
+              ? SpinKitDoubleBounce(
+                  color: Colors.white,
+                  size: 30,
+                )
+              : Text(
+                  text,
+                  style: TextStyle(
+                      fontSize: getProportionateScreenWidth(18),
+                      color: Colors.white),
+                )),
     );
   }
 }

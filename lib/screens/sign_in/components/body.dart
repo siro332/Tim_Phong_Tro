@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:tim_phong_tro/components/custom_suffix_icon.dart';
-import 'package:tim_phong_tro/components/default_button.dart';
-import 'package:tim_phong_tro/components/form_error.dart';
+import 'package:tim_phong_tro/components/no_account_text.dart';
 import 'package:tim_phong_tro/components/social_card.dart';
 import 'package:tim_phong_tro/constants.dart';
 import 'package:tim_phong_tro/screens/sign_in/components/sign_in_form.dart';
@@ -28,7 +25,7 @@ class Body extends StatelessWidget {
               Text(
                 "Welcome Back",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: kPrimaryColor,
                   fontSize: getProportionateScreenWidth(28),
                   fontWeight: FontWeight.bold,
                 ),
@@ -56,21 +53,7 @@ class Body extends StatelessWidget {
               SizedBox(
                 height: SizeConfig.screenHeight * 0.08,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    "Don't have an account? ",
-                    style: TextStyle(fontSize: getProportionateScreenWidth(16)),
-                  ),
-                  Text(
-                    "Sign Up",
-                    style: TextStyle(
-                        fontSize: getProportionateScreenWidth(16),
-                        color: kPrimaryColor),
-                  )
-                ],
-              )
+              NoAccountText()
             ],
           ),
         ),
