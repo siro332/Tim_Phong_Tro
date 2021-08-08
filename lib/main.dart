@@ -1,9 +1,12 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tim_phong_tro/models/my_shared_preferences.dart';
 import 'package:tim_phong_tro/constants.dart';
 import 'package:tim_phong_tro/routes.dart';
 import 'package:tim_phong_tro/screens/home/home_screen.dart';
 import 'package:tim_phong_tro/screens/splash/splash_screen.dart';
+import 'package:tim_phong_tro/services/auth_services.dart';
 
 bool isSecondTimeOpen = false;
 Future<void> main() async {
@@ -11,6 +14,7 @@ Future<void> main() async {
   bool secondTime =
       await MysharedPreferences.instance.getBooleanValue("secondTimeOpen");
   isSecondTimeOpen = secondTime;
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -25,13 +29,16 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      theme: theme(),
-      initialRoute:
-          isSecondTimeOpen ? HomeScreen.routeName : SplashScreen.routeName,
-      routes: routes,
+    return ChangeNotifierProvider(
+      create: (context) => AuthServices(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: theme(),
+        initialRoute:
+            isSecondTimeOpen ? HomeScreen.routeName : SplashScreen.routeName,
+        routes: routes,
+      ),
     );
   }
 }

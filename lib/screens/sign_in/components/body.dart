@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:tim_phong_tro/components/no_account_text.dart';
 import 'package:tim_phong_tro/components/social_card.dart';
 import 'package:tim_phong_tro/constants.dart';
 import 'package:tim_phong_tro/screens/sign_in/components/sign_in_form.dart';
+import 'package:tim_phong_tro/services/auth_services.dart';
 import 'package:tim_phong_tro/size_config.dart';
 
 class Body extends StatelessWidget {
@@ -45,7 +47,10 @@ class Body extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   SocialCard(
-                      icon: "assets/icons/google-icon.svg", press: () {}),
+                      icon: "assets/icons/google-icon.svg",
+                      press: () {
+                        AuthServices().googleLogin();
+                      }),
                   SocialCard(icon: "assets/icons/facebook-2.svg", press: () {}),
                   SocialCard(icon: "assets/icons/twitter.svg", press: () {}),
                 ],

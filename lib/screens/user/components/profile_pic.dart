@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:tim_phong_tro/services/auth_services.dart';
 
 class ProfilePic extends StatefulWidget {
   const ProfilePic({
@@ -20,27 +21,21 @@ class _ProfilePicState extends State<ProfilePic> {
       height: 115,
       width: 115,
       child: Stack(fit: StackFit.expand, clipBehavior: Clip.none, children: [
-        this.widget.image == ""
-            ? Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(45.0),
-                    color: Color(0xFFF5F6F9)),
-              )
-            : ClipRRect(
-                borderRadius: BorderRadius.circular(45.0),
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: this.widget.image,
-                  placeholder: (context, url) => new Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(45.0),
-                        color: Color(0xFFF5F6F9)),
-                  ),
-                  errorWidget: (context, url, error) => new Container(
-                    color: Color(0xFFF5F6F9),
-                  ),
-                ),
-              ),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(45.0),
+          child: CachedNetworkImage(
+            fit: BoxFit.cover,
+            imageUrl: AuthServices().currentUser!.image!,
+            placeholder: (context, url) => new Container(
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(45.0),
+                  color: Color(0xFFF5F6F9)),
+            ),
+            errorWidget: (context, url, error) => new Container(
+              color: Color(0xFFF5F6F9),
+            ),
+          ),
+        ),
         Positioned(
           right: -12,
           bottom: 0,

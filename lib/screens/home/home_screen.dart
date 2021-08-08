@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tim_phong_tro/screens/home/components/general.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tim_phong_tro/screens/user/user_screen.dart';
+import 'package:tim_phong_tro/services/auth_services.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

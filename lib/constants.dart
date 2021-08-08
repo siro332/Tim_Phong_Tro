@@ -29,4 +29,5 @@ const String kPhoneNumberNullError = "Please Enter your phone number";
 const String kAddressNullError = "Please Enter your address";
 
 const String kAccessToken = "access_token";
+const String kSignedIn = "SignedIn";
 const String BASE_URL = "https://tim-phong-tro.herokuapp.com";

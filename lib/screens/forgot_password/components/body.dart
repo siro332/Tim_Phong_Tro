@@ -4,6 +4,7 @@ import 'package:tim_phong_tro/components/custom_suffix_icon.dart';
 import 'package:tim_phong_tro/components/default_button.dart';
 import 'package:tim_phong_tro/components/form_error.dart';
 import 'package:tim_phong_tro/components/no_account_text.dart';
+import 'package:tim_phong_tro/services/auth_services.dart';
 import 'package:tim_phong_tro/size_config.dart';
 
 import '../../../constants.dart';
@@ -51,7 +52,10 @@ class ForgotPassForm extends StatefulWidget {
 class _ForgotPassFormState extends State<ForgotPassForm> {
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
+  String firebaseError = "";
   String email = "";
+  bool isSent = false;
+  bool isLoad = false;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -65,8 +69,14 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
               height: SizeConfig.screenHeight * 0.04,
             ),
             TextFormField(
+              readOnly: isLoad,
               onSaved: (newValue) => email = newValue!,
               onChanged: (value) {
+                if (errors.contains(firebaseError)) {
+                  setState(() {
+                    errors.remove(firebaseError);
+                  });
+                }
                 if (value.isNotEmpty && errors.contains(kEmailNullError)) {
                   setState(() {
                     errors.remove(kEmailNullError);
@@ -106,20 +116,48 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
               height: getProportionateScreenHeight(30),
             ),
             FormError(errors: errors),
+            isSent
+                ? Text(
+                    "An email has been sent to your email address, please check your mail box for a password reset link.",
+                  )
+                : Container(),
             SizedBox(
               height: SizeConfig.screenHeight * 0.1,
             ),
             DefaultButton(
-              text: "Continue",
-              press: () {
-                if (_formKey.currentState!.validate()) {
-                  if (errors.length >= 1) {
-                  } else {
-                    Navigator.pop(context);
-                  }
-                }
-              },
-            ),
+                text: isLoad
+                    ? "Loading"
+                    : isSent
+                        ? "Go back"
+                        : "Continue",
+                press: isLoad
+                    ? () {}
+                    : isSent
+                        ? () {
+                            Navigator.pop(context);
+                          }
+                        : () async {
+                            setState(() {
+                              isLoad = !isLoad;
+                            });
+                            if (_formKey.currentState!.validate()) {
+                              _formKey.currentState!.save();
+                              try {
+                                await AuthServices()
+                                    .sendPassWordResetEmail(email);
+                                setState(() {
+                                  isLoad = !isLoad;
+                                  isSent = true;
+                                });
+                              } catch (e) {
+                                setState(() {
+                                  firebaseError = e.toString().split("] ")[1];
+                                  errors.add(firebaseError);
+                                  isLoad = !isLoad;
+                                });
+                              }
+                            }
+                          }),
             SizedBox(
               height: SizeConfig.screenHeight * 0.1,
             ),

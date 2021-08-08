@@ -16,8 +16,10 @@ class SignInForm extends StatefulWidget {
 }
 
 class _SignInFormState extends State<SignInForm> {
+  final AuthServices _auth = new AuthServices();
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
+  String firebaseError = "";
   bool isLoading = false;
   bool isShowPass = false;
   String email = "";
@@ -61,31 +63,37 @@ class _SignInFormState extends State<SignInForm> {
                 : DefaultButton(
                     text: "Sign In",
                     press: () async {
-                      setState(() {
-                        isLoading = true;
-                      });
                       if (_formKey.currentState!.validate() &&
                           errors.length <= 0) {
                         _formKey.currentState!.save();
-                        String response = await AuthServices.signIn(
-                            this.email, this.password);
-                        if (response == kAccessToken) {
-                          Navigator.pushNamedAndRemoveUntil(
-                              context, HomeScreen.routeName, (route) => false);
-                        } else if (response == kWrongEmailPassword &&
-                            !errors.contains(kWrongEmailPassword)) {
-                          setState(() {
-                            errors.add(kWrongEmailPassword);
-                          });
-                        } else if (response == kNetworkError &&
-                            !errors.contains(kNetworkError)) {
-                          setState(() {
-                            errors.add(kNetworkError);
-                          });
-                        }
                         setState(() {
-                          isLoading = false;
+                          isLoading = true;
                         });
+                        // String response = await AuthServices.signIn(
+                        //     this.email, this.password);
+                        // if (response == kAccessToken) {
+                        //   Navigator.pushNamedAndRemoveUntil(
+                        //       context, HomeScreen.routeName, (route) => false);
+                        // } else if (response == kWrongEmailPassword &&
+                        //     !errors.contains(kWrongEmailPassword)) {
+                        //   setState(() {
+                        //     errors.add(kWrongEmailPassword);
+                        //   });
+                        // } else if (response == kNetworkError &&
+                        //     !errors.contains(kNetworkError)) {
+                        //   setState(() {
+                        //     errors.add(kNetworkError);
+                        //   });
+                        // }
+                        dynamic result = await _auth.signInWithEmailPassword(
+                            email, password);
+                        if (result != kSignedIn)
+                          setState(() {
+                            firebaseError = result;
+                            errors.add(
+                                firebaseError = firebaseError.split("] ")[1]);
+                            isLoading = false;
+                          });
                       }
                     }),
           ],
@@ -98,9 +106,9 @@ class _SignInFormState extends State<SignInForm> {
       obscureText: !this.isShowPass,
       onSaved: (newValue) => password = newValue!,
       onChanged: (value) {
-        if (errors.contains(kWrongEmailPassword)) {
+        if (errors.contains(firebaseError)) {
           setState(() {
-            errors.remove(kWrongEmailPassword);
+            errors.remove(firebaseError);
           });
         }
         if (errors.contains(kNetworkError)) {
@@ -162,9 +170,9 @@ class _SignInFormState extends State<SignInForm> {
       readOnly: this.isLoading,
       onSaved: (newValue) => email = newValue!,
       onChanged: (value) {
-        if (errors.contains(kWrongEmailPassword)) {
+        if (errors.contains(firebaseError)) {
           setState(() {
-            errors.remove(kWrongEmailPassword);
+            errors.remove(firebaseError);
           });
         }
         if (errors.contains(kNetworkError)) {

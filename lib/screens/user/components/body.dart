@@ -47,9 +47,7 @@ class _BodyState extends State<Body> {
               text: "Log Out",
               icon: FontAwesomeIcons.signOutAlt,
               press: () async {
-                await AuthServices.signOut();
-                Navigator.pushNamedAndRemoveUntil(
-                    context, HomeScreen.routeName, (route) => false);
+                await AuthServices().signOut();
               }),
           Spacer(),
         ],

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "144342255588",
+    "firebase_url": "https://gold-fiber-311516-default-rtdb.firebaseio.com",
+    "project_id": "gold-fiber-311516",
+    "storage_bucket": "gold-fiber-311516.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:144342255588:android:2161c6f7126655b361e9f1",
+        "android_client_info": {
+          "package_name": "com.example.tim_phong_tro"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "144342255588-b1op9fhsf5voti5ke2b58q75q35hvuug.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tim_phong_tro",
+            "certificate_hash": "0609fb602af7fedc1eae9dc68201454855259c3b"
+          }
+        },
+        {
+          "client_id": "144342255588-vo78cudkv5tcnjognnc5bguf3qto53fi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjkA21w9WPaT0csh7DYpqf7eq7lgaMn-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "144342255588-vo78cudkv5tcnjognnc5bguf3qto53fi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
