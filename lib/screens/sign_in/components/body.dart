@@ -48,10 +48,22 @@ class Body extends StatelessWidget {
                 children: [
                   SocialCard(
                       icon: "assets/icons/google-icon.svg",
-                      press: () {
-                        AuthServices().googleLogin();
+                      press: () async {
+                        String result = await AuthServices().googleLogin();
+                        if (result != kSignedIn) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(result)));
+                        }
                       }),
-                  SocialCard(icon: "assets/icons/facebook-2.svg", press: () {}),
+                  SocialCard(
+                      icon: "assets/icons/facebook-2.svg",
+                      press: () async {
+                        String result = await AuthServices().facebookLogin();
+                        if (result != kSignedIn) {
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(SnackBar(content: Text(result)));
+                        }
+                      }),
                   SocialCard(icon: "assets/icons/twitter.svg", press: () {}),
                 ],
               ),

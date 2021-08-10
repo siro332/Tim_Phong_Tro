@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tim_phong_tro/models/my_shared_preferences.dart';
-import 'package:tim_phong_tro/models/user_info.dart';
-import 'package:tim_phong_tro/screens/home/home_screen.dart';
 import 'package:tim_phong_tro/screens/user/components/profile_pic.dart';
 import 'package:tim_phong_tro/services/auth_services.dart';
+
+import '../../../constants.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -24,8 +24,7 @@ class _BodyState extends State<Body> {
             flex: 1,
           ),
           FutureBuilder(
-              future:
-                  MysharedPreferences.instance.getStringValue(UserInfo.image),
+              future: MysharedPreferences.instance.getStringValue(jImage),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.hasData && snapshot.data != "") {
                   return ProfilePic(image: snapshot.data!);

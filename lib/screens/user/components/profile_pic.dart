@@ -23,18 +23,25 @@ class _ProfilePicState extends State<ProfilePic> {
       child: Stack(fit: StackFit.expand, clipBehavior: Clip.none, children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(45.0),
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            imageUrl: AuthServices().currentUser!.image!,
-            placeholder: (context, url) => new Container(
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(45.0),
-                  color: Color(0xFFF5F6F9)),
-            ),
-            errorWidget: (context, url, error) => new Container(
-              color: Color(0xFFF5F6F9),
-            ),
-          ),
+          child: AuthServices().currentUser == null ||
+                  AuthServices().currentUser!.image != ""
+              ? Container(
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(45.0),
+                      color: Color(0xFFF5F6F9)),
+                )
+              : CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: AuthServices().currentUser!.image!,
+                  placeholder: (context, url) => new Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(45.0),
+                        color: Color(0xFFF5F6F9)),
+                  ),
+                  errorWidget: (context, url, error) => new Container(
+                    color: Color(0xFFF5F6F9),
+                  ),
+                ),
         ),
         Positioned(
           right: -12,

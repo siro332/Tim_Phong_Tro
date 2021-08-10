@@ -31,3 +31,12 @@ const String kAddressNullError = "Please Enter your address";
 const String kAccessToken = "access_token";
 const String kSignedIn = "SignedIn";
 const String BASE_URL = "https://tim-phong-tro.herokuapp.com";
+
+//const String BASE_URL = "http://192.168.1.3:8080";
+
+//User
+const String jFirstName = 'firstName';
+const String jLastName = 'lastName';
+const String jPhoneNumber = 'phoneNumber';
+const String jImage = 'image';
+const String jDescription = 'description';
