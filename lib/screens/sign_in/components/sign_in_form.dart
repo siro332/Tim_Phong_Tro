@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tim_phong_tro/components/custom_suffix_icon.dart';
-import 'package:tim_phong_tro/components/default_button.dart';
-import 'package:tim_phong_tro/components/form_error.dart';
-import 'package:tim_phong_tro/constants.dart';
-import 'package:tim_phong_tro/screens/forgot_password/forgot_password_screen.dart';
-import 'package:tim_phong_tro/screens/home/home_screen.dart';
-import 'package:tim_phong_tro/services/auth_services.dart';
-import 'package:tim_phong_tro/size_config.dart';
+
+import '../../../components/custom_suffix_icon.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
+import '../../../constants.dart';
+import '../../../services/auth_services.dart';
+import '../../../size_config.dart';
+import '../../forgot_password/forgot_password_screen.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -71,12 +71,15 @@ class _SignInFormState extends State<SignInForm> {
                         });
                         dynamic result = await _auth.signInWithEmailPassword(
                             email, password);
-                        if (result != kSignedIn)
+                        if (result != kSignedIn) {
                           setState(() {
                             firebaseError = result;
                             errors.add(firebaseError);
                             isLoading = false;
                           });
+                        } else {
+                          Navigator.pop(context);
+                        }
                       }
                     }),
           ],

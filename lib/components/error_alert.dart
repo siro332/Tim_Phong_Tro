@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tim_phong_tro/screens/sign_in/sign_in_screen.dart';
 
 import '../size_config.dart';
 import 'default_button.dart';
@@ -32,10 +31,8 @@ class ErrorAlert extends StatelessWidget {
                 height: SizeConfig.screenHeight * 0.02,
               ),
               DefaultButton(
-                text: "Login",
-                press: () {
-                  Navigator.pushNamed(context, SignInScreen.routeName);
-                },
+                text: this.buttonText,
+                press: this.press,
               )
             ],
           ),

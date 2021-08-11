@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tim_phong_tro/components/custom_suffix_icon.dart';
-import 'package:tim_phong_tro/components/default_button.dart';
-import 'package:tim_phong_tro/components/form_error.dart';
-import 'package:tim_phong_tro/services/auth_services.dart';
-import 'package:tim_phong_tro/size_config.dart';
 
 import '../../../constants.dart';
+import '../../../size_config.dart';
 import '../sign_up_form.dart';
 
 class Body extends StatelessWidget {

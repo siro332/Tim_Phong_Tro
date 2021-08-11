@@ -2,7 +2,7 @@
     package="com.example.tim_phong_tro">
     <uses-permission android:name="android.permission.INTERNET"/>
    <application
-        android:label="tim_phong_tro"
+        android:label="Tìm Phòng Trọ"
         android:icon="@mipmap/ic_launcher">
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
 

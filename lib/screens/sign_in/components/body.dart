@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:tim_phong_tro/components/no_account_text.dart';
-import 'package:tim_phong_tro/components/social_card.dart';
-import 'package:tim_phong_tro/constants.dart';
-import 'package:tim_phong_tro/screens/sign_in/components/sign_in_form.dart';
-import 'package:tim_phong_tro/services/auth_services.dart';
-import 'package:tim_phong_tro/size_config.dart';
+
+import '../../../components/no_account_text.dart';
+import '../../../components/social_card.dart';
+import '../../../constants.dart';
+import '../../../services/auth_services.dart';
+import '../../../size_config.dart';
+import 'sign_in_form.dart';
 
 class Body extends StatelessWidget {
   const Body({Key? key}) : super(key: key);
@@ -53,6 +53,8 @@ class Body extends StatelessWidget {
                         if (result != kSignedIn) {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text(result)));
+                        } else {
+                          Navigator.pop(context);
                         }
                       }),
                   SocialCard(
@@ -62,6 +64,8 @@ class Body extends StatelessWidget {
                         if (result != kSignedIn) {
                           ScaffoldMessenger.of(context)
                               .showSnackBar(SnackBar(content: Text(result)));
+                        } else {
+                          Navigator.pop(context);
                         }
                       }),
                   SocialCard(icon: "assets/icons/twitter.svg", press: () {}),

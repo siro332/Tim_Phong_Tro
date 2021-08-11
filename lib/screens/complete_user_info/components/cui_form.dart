@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tim_phong_tro/components/custom_suffix_icon.dart';
-import 'package:tim_phong_tro/components/default_button.dart';
-import 'package:tim_phong_tro/components/form_error.dart';
-import 'package:tim_phong_tro/models/dtos/user_info.dart';
-import 'package:tim_phong_tro/screens/home/home_screen.dart';
-import 'package:tim_phong_tro/services/auth_services.dart';
-import 'package:tim_phong_tro/services/user_services.dart';
 
+import '../../../components/custom_suffix_icon.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
 import '../../../constants.dart';
+import '../../../models/dtos/user_info.dart';
+import '../../../services/user_services.dart';
 import '../../../size_config.dart';
 
 class CompleteUserInfoForm extends StatefulWidget {
@@ -20,7 +18,6 @@ class CompleteUserInfoForm extends StatefulWidget {
 }
 
 class _CompleteUserInfoFormState extends State<CompleteUserInfoForm> {
-  final AuthServices _auth = new AuthServices();
   final _formKey = GlobalKey<FormState>();
   final List<String> errors = [];
   String firebaseError = "";

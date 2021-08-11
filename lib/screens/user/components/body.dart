@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tim_phong_tro/models/my_shared_preferences.dart';
-import 'package:tim_phong_tro/screens/user/components/profile_pic.dart';
+import 'package:tim_phong_tro/components/profile_pic.dart';
+import 'package:tim_phong_tro/screens/user_profile/user_profile_screen.dart';
 import 'package:tim_phong_tro/services/auth_services.dart';
 
 import '../../../constants.dart';
@@ -27,15 +28,27 @@ class _BodyState extends State<Body> {
               future: MysharedPreferences.instance.getStringValue(jImage),
               builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
                 if (snapshot.hasData && snapshot.data != "") {
-                  return ProfilePic(image: snapshot.data!);
+                  return ProfilePic(
+                    image: snapshot.data!,
+                    isEdit: false,
+                  );
                 } else
-                  return ProfilePic();
+                  return ProfilePic(
+                    image: "",
+                    isEdit: false,
+                  );
               }),
           SizedBox(
             height: 30,
           ),
           UserMenuItem(
-              text: "My Account", icon: FontAwesomeIcons.user, press: () {}),
+              text: "My Account",
+              icon: FontAwesomeIcons.user,
+              press: () async {
+                String uid = AuthServices().currentUser!.uid;
+                Navigator.pushNamed(context, UserProfileScreen.routeName,
+                    arguments: uid);
+              }),
           UserMenuItem(
               text: "Setting", icon: FontAwesomeIcons.cog, press: () {}),
           UserMenuItem(

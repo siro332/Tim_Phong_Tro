@@ -1,12 +1,12 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tim_phong_tro/models/entities/user.dart';
+import 'package:tim_phong_tro/features/authenticate/domain/entities/user.dart';
 import 'package:tim_phong_tro/models/my_shared_preferences.dart';
-import 'package:tim_phong_tro/models/user.dart';
 import 'package:tim_phong_tro/services/user_services.dart';
 
 import '../constants.dart';
@@ -16,17 +16,16 @@ class AuthServices extends ChangeNotifier {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final googleSignIn = GoogleSignIn();
   final facebookSignIn = FacebookAuth.instance;
-  AppUserE? _user(User? user) {
-    return user == null ? null : AppUserE(uid: user.uid);
+  AppUser? _user(User? user) {
+    return user == null ? null : AppUser(uid: user.uid);
   }
 
   Future<String> getCurrentUserToken() async {
     return await _auth.currentUser!.getIdToken();
   }
 
-  GoogleSignInAccount? _googleUser;
-  AppUserE? get currentUser => _user(_auth.currentUser);
-  Stream<AppUserE?> get user =>
+  AppUser? get currentUser => _user(_auth.currentUser);
+  Stream<AppUser?> get user =>
       _auth.authStateChanges().map((User? user) => _user(user));
   //auth change user stream
   Future<String> googleLogin() async {
@@ -38,8 +37,9 @@ class AuthServices extends ChangeNotifier {
     await _auth.signInWithCredential(credential);
     String token = await _auth.currentUser!.getIdToken();
     await registerToServer(token);
-    print(await _auth.currentUser!.getIdToken(true));
-    _user(FirebaseAuth.instance.currentUser);
+    String newToken = await _auth.currentUser!.getIdToken(true);
+    _user(_auth.currentUser);
+    UserServices().getUserInfo(newToken, _auth.currentUser!.uid);
     notifyListeners();
     return kSignedIn;
   }
@@ -55,8 +55,10 @@ class AuthServices extends ChangeNotifier {
         await _auth.signInWithCredential(facebookAuthCredential);
         String token = await _auth.currentUser!.getIdToken();
         await registerToServer(token);
-        print(await _auth.currentUser!.getIdToken(true));
-        _user(FirebaseAuth.instance.currentUser);
+        String newToken = await _auth.currentUser!.getIdToken(true);
+        _user(_auth.currentUser);
+
+        UserServices().getUserInfo(newToken, _auth.currentUser!.uid);
         notifyListeners();
         return kSignedIn;
       } on Exception catch (e) {
@@ -70,9 +72,13 @@ class AuthServices extends ChangeNotifier {
     try {
       UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
+      String token = await _auth.currentUser!.getIdToken();
+      await registerToServer(token);
+      log(await _auth.currentUser!.getIdToken(true));
       this._user(result.user);
       return kSignedIn;
     } catch (e) {
+      await signOut();
       return e.toString().split("] ")[1];
     }
   }
@@ -83,8 +89,9 @@ class AuthServices extends ChangeNotifier {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       String token = await result.user!.getIdToken();
-      print(await registerToServer(token));
-      print(await _auth.currentUser!.getIdToken(true));
+      await registerToServer(token);
+      String newToken = await _auth.currentUser!.getIdToken(true);
+      UserServices().getUserInfo(newToken, _auth.currentUser!.uid);
       return kSignedIn;
     } catch (e) {
       return e.toString().split("] ")[1];
@@ -104,41 +111,15 @@ class AuthServices extends ChangeNotifier {
           "Content-Type": "application/json",
         },
       );
-      return jsonDecode(response.body)['token'];
+      if (response.statusCode == 200 ||
+          response.body.toString().contains("already exist")) {
+        return "Ok";
+      } else {
+        await signOut();
+        return "";
+      }
     } catch (e) {
       return e.toString();
-    }
-  }
-
-  static signIn(email, password) async {
-    try {
-      var response = await http.post(
-        Uri.parse(BASE_URL + "/api/auth/login"),
-        body: {"email": email, "password": password},
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        encoding: Encoding.getByName('utf-8'),
-      );
-      var jsonData;
-      if (response.statusCode == 200) {
-        jsonData = jsonDecode(response.body);
-        String token = await MysharedPreferences.instance
-            .setStringValue(AppUser.accessToken, jsonData[AppUser.accessToken]);
-
-        await MysharedPreferences.instance.setStringValue(
-            AppUser.refreshToken, jsonData[AppUser.refreshToken]);
-
-        String username = await MysharedPreferences.instance
-            .setStringValue(AppUser.username, jsonData[AppUser.username]);
-        await UserServices.getUserInfo(token, username);
-        return kAccessToken;
-      } else if (response.statusCode == 401) {
-        return kWrongEmailPassword;
-      }
-      return kNetworkError;
-    } catch (error) {
-      return kNetworkError;
     }
   }
 

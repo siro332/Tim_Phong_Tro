@@ -56,7 +56,7 @@ ThemeData theme() {
       scaffoldBackgroundColor: Colors.white,
       primarySwatch: Colors.lightBlue,
       primaryColor: kPrimaryColor,
-      fontFamily: "Muli",
+      fontFamily: GoogleFonts.nunito().fontFamily,
       textTheme: TextTheme(
           bodyText1: TextStyle(color: kTextColor),
           bodyText2: TextStyle(color: kTextColor)));

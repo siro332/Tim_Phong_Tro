@@ -5,7 +5,7 @@ const kPrimaryLightColor = Color(0xFFFFECDF);
 const kPrimaryGradientColor = LinearGradient(
   begin: Alignment.topLeft,
   end: Alignment.bottomRight,
-  colors: [Color(0xFFFFA53E), Color(0xFFFF7643)],
+  colors: [Color(0xff56CCF2), Color(0xff2F80ED)],
 );
 const kSecondaryColor = Color(0xFF979797);
 const kTextColor = Color(0xFF757575);
@@ -32,7 +32,7 @@ const String kAccessToken = "access_token";
 const String kSignedIn = "SignedIn";
 const String BASE_URL = "https://tim-phong-tro.herokuapp.com";
 
-//const String BASE_URL = "http://192.168.1.3:8080";
+//const String BASE_URL = "http://192.168.1.9:8080";
 
 //User
 const String jFirstName = 'firstName';

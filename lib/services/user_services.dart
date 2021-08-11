@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:tim_phong_tro/models/entities/user.dart';
+import 'package:tim_phong_tro/features/authenticate/domain/entities/user.dart';
 import 'package:tim_phong_tro/models/my_shared_preferences.dart';
 import 'package:tim_phong_tro/models/dtos/user_info.dart';
 import 'package:tim_phong_tro/services/auth_services.dart';
@@ -20,13 +20,31 @@ class UserServices {
     return kNetworkError;
   }
 
-  static getUserInfo(String token, String username) async {
-    var response = await http.get(
-      Uri.parse(BASE_URL + "/api/user/info/" + username),
-      headers: {
-        "Authorization": "Bearer " + token,
-      },
-    );
+  getUserInfo(String token, String uid) async {
+    try {
+      var response = await http.get(
+        Uri.parse(BASE_URL + "/api/user/info/" + uid),
+        headers: {
+          "Authorization": "Bearer " + token,
+        },
+      );
+      if (response.statusCode == 200) {
+        var jsonData = jsonDecode(utf8.decode(response.bodyBytes));
+        await MysharedPreferences.instance
+            .setStringValue(jImage, jsonData[jImage]);
+        return new AppUserInfo(
+            firstName: jsonData[jFirstName],
+            lastName: jsonData[jLastName],
+            phoneNumber: jsonData[jPhoneNumber],
+            description: jsonData[jDescription],
+            image: jsonData[jImage]);
+      } else {
+        return "Error";
+      }
+    } catch (e) {
+      return "Error";
+    }
+
     // var jsonData;
     // if (response.statusCode == 200) {
     //   jsonData = jsonDecode(response.body);
@@ -44,7 +62,7 @@ class UserServices {
   }
 
   Future<String> saveUserInfo(AppUserInfo userInfo) async {
-    AppUserE user = AuthServices().currentUser!;
+    AppUser user = AuthServices().currentUser!;
     Map data = {
       jFirstName: userInfo.firstName != null ? userInfo.firstName : "",
       jLastName: userInfo.lastName != null ? userInfo.lastName : "",
@@ -58,7 +76,7 @@ class UserServices {
       var response = await http.post(
         Uri.parse(BASE_URL +
             "/api/user/info/save/" +
-            AuthServices().currentUser!.uid!),
+            AuthServices().currentUser!.uid),
         body: body,
         headers: {
           "Authorization": "Bearer " + token,
