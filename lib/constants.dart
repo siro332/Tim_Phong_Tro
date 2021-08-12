@@ -35,8 +35,4 @@ const String BASE_URL = "https://tim-phong-tro.herokuapp.com";
 //const String BASE_URL = "http://192.168.1.9:8080";
 
 //User
-const String jFirstName = 'firstName';
-const String jLastName = 'lastName';
-const String jPhoneNumber = 'phoneNumber';
-const String jImage = 'image';
-const String jDescription = 'description';
+

@@ -1,11 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:tim_phong_tro/models/my_shared_preferences.dart';
-import 'package:tim_phong_tro/components/profile_pic.dart';
-import 'package:tim_phong_tro/screens/user_profile/user_profile_screen.dart';
-import 'package:tim_phong_tro/services/auth_services.dart';
-
-import '../../../constants.dart';
+import 'package:tim_phong_tro/features/authenticate/presentation/bloc/authentication_bloc.dart';
+import 'package:tim_phong_tro/features/user_info/presentation/bloc/user_info_bloc.dart';
+import 'package:tim_phong_tro/features/user_info/presentation/screens/user_profile/user_profile_screen.dart';
+import '../../../features/user_info/data/models/const.dart';
+import '../../../models/my_shared_preferences.dart';
+import '../../../components/profile_pic.dart';
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -24,20 +26,18 @@ class _BodyState extends State<Body> {
           Spacer(
             flex: 1,
           ),
-          FutureBuilder(
-              future: MysharedPreferences.instance.getStringValue(jImage),
-              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                if (snapshot.hasData && snapshot.data != "") {
-                  return ProfilePic(
-                    image: snapshot.data!,
-                    isEdit: false,
-                  );
-                } else
-                  return ProfilePic(
-                    image: "",
-                    isEdit: false,
-                  );
-              }),
+          BlocBuilder<UserInfoBloc, UserInfoState>(builder: (context, state) {
+            if (state is HaveData) {
+              return ProfilePic(
+                image: state.info.image,
+                isEdit: false,
+              );
+            } else
+              return ProfilePic(
+                image: "",
+                isEdit: false,
+              );
+          }),
           SizedBox(
             height: 30,
           ),
@@ -45,7 +45,7 @@ class _BodyState extends State<Body> {
               text: "My Account",
               icon: FontAwesomeIcons.user,
               press: () async {
-                String uid = AuthServices().currentUser!.uid;
+                String uid = FirebaseAuth.instance.currentUser!.uid;
                 Navigator.pushNamed(context, UserProfileScreen.routeName,
                     arguments: uid);
               }),
@@ -58,8 +58,8 @@ class _BodyState extends State<Body> {
           UserMenuItem(
               text: "Log Out",
               icon: FontAwesomeIcons.signOutAlt,
-              press: () async {
-                await AuthServices().signOut();
+              press: () {
+                BlocProvider.of<AuthenticationBloc>(context).add(SigningOut());
               }),
           Spacer(),
         ],

@@ -1,20 +1,29 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:tim_phong_tro/models/my_shared_preferences.dart';
 import 'package:tim_phong_tro/constants.dart';
 import 'package:tim_phong_tro/routes.dart';
 import 'package:tim_phong_tro/screens/home/home_screen.dart';
 import 'package:tim_phong_tro/screens/splash/splash_screen.dart';
-import 'package:tim_phong_tro/services/auth_services.dart';
+
+import 'features/authenticate/presentation/bloc/authentication_bloc.dart';
+import 'features/user_info/presentation/bloc/user_info_bloc.dart';
+import 'injection_container.dart' as sl;
 
 bool isSecondTimeOpen = false;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await sl.init();
   bool secondTime =
       await MysharedPreferences.instance.getBooleanValue("secondTimeOpen");
   isSecondTimeOpen = secondTime;
   await Firebase.initializeApp();
+  final appDocumentDirectory = await getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
   runApp(MyApp());
 }
 
@@ -29,8 +38,15 @@ class MyApp extends StatefulWidget {
 class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => AuthServices(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => sl.sl<AuthenticationBloc>(),
+        ),
+        BlocProvider(
+          create: (context) => sl.sl<UserInfoBloc>(),
+        )
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
@@ -40,6 +56,12 @@ class MyAppState extends State<MyApp> {
         routes: routes,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    Hive.close();
+    super.dispose();
   }
 }
 
