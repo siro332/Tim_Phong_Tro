@@ -1,4 +1,5 @@
 import 'package:flutter/widgets.dart';
+import 'package:tim_phong_tro/screens/huy_ui/search.dart';
 
 import 'features/authenticate/presentation/screens/forgot_password/forgot_password_screen.dart';
 import 'features/authenticate/presentation/screens/sign_in/sign_in_screen.dart';
@@ -16,4 +17,5 @@ final Map<String, WidgetBuilder> routes = {
   ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
   HomeScreen.routeName: (context) => HomeScreen(),
   UserProfileScreen.routeName: (context) => UserProfileScreen(),
+  Search.routeName: (context) => Search(),
 };
