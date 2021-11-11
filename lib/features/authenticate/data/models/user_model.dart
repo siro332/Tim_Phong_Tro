@@ -4,4 +4,7 @@ class AppUserModel extends AppUser {
   AppUserModel({
     required String uid,
   }) : super(uid: uid);
+  factory AppUserModel.fromJson(Map<String, dynamic> json) {
+    return AppUserModel(uid: json["uid"]);
+  }
 }

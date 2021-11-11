@@ -1,18 +1,19 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:tim_phong_tro/core/error/exceptions.dart';
-import 'package:tim_phong_tro/core/firebase/firebase.dart';
-import 'package:tim_phong_tro/features/authenticate/data/models/user_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:tim_phong_tro/models/my_shared_preferences.dart';
 
 import '../../../../constants.dart';
+import '../../../../core/error/exceptions.dart';
+import '../../../../core/firebase/firebase.dart';
+import '../../../../models/my_shared_preferences.dart';
+import '../models/user_model.dart';
 
 abstract class UserRemoteDataSource {
-  Future<AppUserModel> getCurrentUser();
+  AppUserModel getCurrentUser();
   Future<AppUserModel> signInWithEmailAndPassword(
       {required String email, required String password});
   Future<AppUserModel> signInWithGoogle();
@@ -33,7 +34,7 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   final facebookSignIn = FacebookAuth.instance;
 
   @override
-  Future<AppUserModel> getCurrentUser() async {
+  AppUserModel getCurrentUser() {
     try {
       return AppUserModel(uid: _auth.currentUser!.uid);
     } catch (e) {
@@ -85,7 +86,9 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
       String token = await _auth.currentUser!.getIdToken();
       String result = await registerToServer(token);
       if (result == "Ok") {
-        await _auth.currentUser!.getIdToken(true);
+        log(await _auth.currentUser!.getIdToken(true));
+        // UserPostRemoteDataSourceImpl posts = new UserPostRemoteDataSourceImpl();
+        // await posts.getPostDetail(461);
         return AppUserModel(uid: userCredential.user!.uid);
       } else {
         await signOut();

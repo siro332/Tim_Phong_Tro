@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:tim_phong_tro/components/default_button.dart';
+import 'package:tim_phong_tro/components/default_outlined_button.dart';
+import 'package:tim_phong_tro/constants.dart';
 
-class Filter extends StatefulWidget {
+class PriceFilter extends StatefulWidget {
   @override
-  _FilterState createState() => _FilterState();
+  _PriceFilterState createState() => _PriceFilterState();
 }
 
-class _FilterState extends State<Filter> {
-
-  var selectedRange = RangeValues(400, 1000);
-
+class _PriceFilterState extends State<PriceFilter> {
+  var selectedRange = RangeValues(500000, 10000000);
+  String start = "VND 500k";
+  String end = "VND 10M";
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -16,39 +19,8 @@ class _FilterState extends State<Filter> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Row(
             children: [
-
-              Text(
-                "Filter",
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-
-              SizedBox(
-                width: 8,
-              ),
-
-              Text(
-                "your search",
-                style: TextStyle(
-                  fontSize: 24,
-                ),
-              ),
-
-            ],
-          ),
-
-          SizedBox(
-            height: 32,
-          ),
-
-          Row(
-            children: [
-
               Text(
                 "Price",
                 style: TextStyle(
@@ -56,117 +28,100 @@ class _FilterState extends State<Filter> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-
               SizedBox(
                 width: 8,
               ),
-
               Text(
                 "range",
                 style: TextStyle(
                   fontSize: 24,
                 ),
               ),
-
             ],
           ),
-
           RangeSlider(
             values: selectedRange,
             onChanged: (RangeValues newRange) {
               setState(() {
+                if (selectedRange.start < 1000000) {
+                  start =
+                      r"VND " + (selectedRange.start ~/ 1000).toString() + "k";
+                } else {
+                  start = r"VND " +
+                      (double.parse((selectedRange.start / 1000000)
+                              .toStringAsFixed(2)))
+                          .toString() +
+                      "M";
+                }
+                if (selectedRange.end < 1000000) {
+                  end = r"VND " + (selectedRange.end ~/ 1000).toString() + "k";
+                } else {
+                  end = r"VND " +
+                      (double.parse(
+                              (selectedRange.end / 1000000).toStringAsFixed(2)))
+                          .toString() +
+                      "M";
+                }
                 selectedRange = newRange;
               });
             },
-            min: 70,
-            max: 1000,
-            activeColor: Colors.blue[900],
+            min: 500000,
+            max: 10000000,
+            activeColor: kPrimaryColor,
             inactiveColor: Colors.grey[300],
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Text(
-                r"$70k",
+                start,
                 style: TextStyle(
                   fontSize: 14,
                 ),
               ),
-
               Text(
-                r"$1000k",
+                end,
                 style: TextStyle(
                   fontSize: 14,
                 ),
               ),
-
             ],
           ),
-
           SizedBox(
             height: 16,
           ),
-
-          Text(
-            "Rooms",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          SizedBox(
-            height: 16,
-          ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
-              buildOption("Any", false),
-              buildOption("1", false),
-              buildOption("2", true),
-              buildOption("3+", false),
-
+              SizedBox(
+                width: 150.0,
+                height: 50.0,
+                child: DefaultOutlinedButton(
+                  text: "Cancel",
+                  press: () => Navigator.pop(context),
+                ),
+              ),
+              SizedBox(
+                width: 150.0,
+                height: 50.0,
+                child: DefaultButton(
+                  text: "OK",
+                  press: () {
+                    Navigator.pop(context, selectedRange);
+                  },
+                ),
+              )
             ],
           ),
-
           SizedBox(
             height: 16,
           ),
-
-          Text(
-            "Bathrooms",
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-
-          SizedBox(
-            height: 16,
-          ),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-
-              buildOption("Any", true),
-              buildOption("1", false),
-              buildOption("2", false),
-              buildOption("3+", false),
-
-            ],
-          ),
-
         ],
       ),
     );
   }
 
-  Widget buildOption(String text, bool selected){
+  Widget buildOption(String text, bool selected) {
     return Container(
       height: 45,
       width: 65,
@@ -178,8 +133,7 @@ class _FilterState extends State<Filter> {
           border: Border.all(
             width: selected ? 0 : 1,
             color: Colors.grey,
-          )
-      ),
+          )),
       child: Center(
         child: Text(
           text,

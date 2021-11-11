@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:tim_phong_tro/features/user_post/presentation/bloc/bloc/user_post_bloc.dart';
 import 'package:tim_phong_tro/models/my_shared_preferences.dart';
 import 'package:tim_phong_tro/constants.dart';
 import 'package:tim_phong_tro/routes.dart';
@@ -12,6 +13,7 @@ import 'package:tim_phong_tro/screens/splash/splash_screen.dart';
 
 import 'features/authenticate/presentation/bloc/authentication_bloc.dart';
 import 'features/user_info/presentation/bloc/user_info_bloc.dart';
+import 'features/user_post/presentation/bloc/bloc/save_post_bloc.dart';
 import 'injection_container.dart' as sl;
 
 bool isSecondTimeOpen = false;
@@ -45,7 +47,9 @@ class MyAppState extends State<MyApp> {
         ),
         BlocProvider(
           create: (context) => sl.sl<UserInfoBloc>(),
-        )
+        ),
+        BlocProvider(create: (context) => sl.sl<UserPostBloc>()),
+        BlocProvider(create: (context) => sl.sl<SavePostBloc>()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:tim_phong_tro/core/network/network_info.dart';
@@ -16,6 +15,15 @@ import 'package:tim_phong_tro/features/authenticate/domain/usecases/sign_out/sig
 import 'package:tim_phong_tro/features/user_info/domain/usecases/get_user_info.dart';
 import 'package:tim_phong_tro/features/user_info/domain/usecases/set_user_info.dart';
 import 'package:tim_phong_tro/features/user_info/presentation/bloc/user_info_bloc.dart';
+import 'package:tim_phong_tro/features/user_post/data/datasources/user_post_remote_datasource.dart';
+import 'package:tim_phong_tro/features/user_post/data/repositories/user_post_repo_impl.dart';
+import 'package:tim_phong_tro/features/user_post/domain/repositories/user_post_repository.dart';
+import 'package:tim_phong_tro/features/user_post/domain/usecases/get_list_posts.dart';
+import 'package:tim_phong_tro/features/user_post/domain/usecases/get_post_detail.dart';
+import 'package:tim_phong_tro/features/user_post/domain/usecases/get_saved_post.dart';
+import 'package:tim_phong_tro/features/user_post/domain/usecases/search_post.dart';
+import 'package:tim_phong_tro/features/user_post/presentation/bloc/bloc/save_post_bloc.dart';
+import 'package:tim_phong_tro/features/user_post/presentation/bloc/bloc/user_post_bloc.dart';
 
 import 'features/authenticate/presentation/bloc/authentication_bloc.dart';
 import 'features/user_info/data/datasources/user_info_local_datasource.dart';
@@ -69,12 +77,29 @@ Future<void> init() async {
   sl.registerLazySingleton<UserInfoRepository>(() =>
       UserInfoRepositoryImplementation(
           remoteDataSource: sl(), localDataSource: sl(), networkInfo: sl()));
-
   //Data Sources
   sl.registerLazySingleton<UserInfoRemoteDataSource>(
       () => UserInfoRemoteDataSourceImpl());
   sl.registerLazySingleton<UserInfoLocalDataSource>(
       () => UserInfoLocalDataSourceImpl());
+
+  //!Feature = UserPost
+  //Bloc
+  sl.registerFactory(() => UserPostBloc(
+      getListPost: sl(), getPostDetail: sl(), searchUserPosts: sl()));
+  sl.registerFactory(() => SavePostBloc(getSavedPosts: sl()));
+  //Use cases
+  sl.registerLazySingleton(() => GetListUserPosts(sl()));
+  sl.registerLazySingleton(() => GetPostDetail(sl()));
+  sl.registerLazySingleton(() => SearchUserPosts(sl()));
+  sl.registerLazySingleton(() => GetSavedPosts(sl()));
+  //Repository
+  sl.registerLazySingleton<UserPostRepository>(() =>
+      UserPostRepositoryImplementation(
+          remoteDataSource: sl(), networkInfo: sl()));
+  //DataSource
+  sl.registerLazySingleton<UserPostRemoteDataSource>(
+      () => UserPostRemoteDataSourceImpl());
 
   //!Core
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));

@@ -35,9 +35,9 @@ class UserRepositoryImplementation implements UserRepository {
   }
 
   @override
-  Future<Either<Failure, AppUser>> getCurrentUser() async {
+  Either<Failure, AppUser> getCurrentUser() {
     try {
-      final user = await remoteDataSource.getCurrentUser();
+      final user = remoteDataSource.getCurrentUser();
       //localDataSource.cacheUser(user);
       return Right(user);
     } on AuthException {

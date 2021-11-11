@@ -18,11 +18,11 @@ class AppUserInfoModel extends AppUserInfo {
 
   factory AppUserInfoModel.fromJson(Map<String, dynamic> json) {
     return AppUserInfoModel(
-        firstName: json[jFirstName],
-        lastName: json[jLastName],
-        phoneNumber: json[jPhoneNumber],
-        image: json[jImage],
-        description: json[jDescription]);
+        firstName: json[jFirstName] != null ? json[jFirstName] : "",
+        lastName: json[jLastName] != null ? json[jLastName] : "",
+        phoneNumber: json[jPhoneNumber] != null ? json[jPhoneNumber] : "",
+        image: json[jImage] != null ? json[jImage] : "",
+        description: json[jDescription] != null ? json[jDescription] : "");
   }
   Map<String, dynamic> toJson() => {
         jFirstName: firstName,

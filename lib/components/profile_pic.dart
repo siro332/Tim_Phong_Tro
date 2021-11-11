@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class ProfilePic extends StatefulWidget {
-  const ProfilePic({Key? key, required this.isEdit, required this.image})
+  const ProfilePic(
+      {Key? key, required this.isEdit, required this.image, required this.uid})
       : super(key: key);
   final bool isEdit;
   final String image;
+  final String uid;
   @override
   _ProfilePicState createState() => _ProfilePicState();
 }

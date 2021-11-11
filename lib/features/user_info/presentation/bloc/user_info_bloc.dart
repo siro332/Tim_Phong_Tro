@@ -25,13 +25,13 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
     UserInfoEvent event,
   ) async* {
     if (event is GetUserInfoEvent) {
-      yield Loading();
+      yield InfoLoading();
       final getData = await getUserInfo(new GetUserInfoParams(uid: event.uid));
       yield getData.fold(
           (failure) => Error(message: _mapFailureToMessage(failure)),
           (info) => HaveData(info: info));
     } else if (event is SetUserInfoEvent) {
-      yield Loading();
+      yield InfoLoading();
       final setData =
           await setUserInfo(new SetUserInfoParams(info: event.userInfo));
       yield setData.fold(

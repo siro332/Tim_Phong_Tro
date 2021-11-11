@@ -65,7 +65,7 @@ class _CompleteUserInfoFormState extends State<CompleteUserInfoForm> {
                     SizedBox(
                       height: getProportionateScreenHeight(30),
                     ),
-                    (state is Loading)
+                    (state is InfoLoading)
                         ? DefaultButton(
                             text: "Loading",
                             press: () {},
@@ -96,7 +96,7 @@ class _CompleteUserInfoFormState extends State<CompleteUserInfoForm> {
 
   TextFormField buildFirstNameFormField(UserInfoState state) {
     return TextFormField(
-      readOnly: (state is Loading),
+      readOnly: (state is InfoLoading),
       onSaved: (newValue) => firstName = newValue!,
       onChanged: (value) {
         if (errors.contains(firebaseError)) {
@@ -137,7 +137,7 @@ class _CompleteUserInfoFormState extends State<CompleteUserInfoForm> {
 
   TextFormField buildLastNameFormField(UserInfoState state) {
     return TextFormField(
-      readOnly: (state is Loading),
+      readOnly: (state is InfoLoading),
       onSaved: (newValue) => lastName = newValue!,
       onChanged: (value) {
         if (errors.contains(firebaseError)) {
@@ -178,7 +178,7 @@ class _CompleteUserInfoFormState extends State<CompleteUserInfoForm> {
 
   TextFormField buildPhoneNumberFormField(UserInfoState state) {
     return TextFormField(
-      readOnly: (state is Loading),
+      readOnly: (state is InfoLoading),
       onSaved: (newValue) => phoneNumber = newValue!,
       onChanged: (value) {
         if (errors.contains(firebaseError)) {

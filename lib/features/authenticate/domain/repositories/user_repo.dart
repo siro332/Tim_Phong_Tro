@@ -4,7 +4,7 @@ import '../../../../core/error/failure.dart';
 import '../entities/user.dart';
 
 abstract class UserRepository {
-  Future<Either<Failure, AppUser>> getCurrentUser();
+  Either<Failure, AppUser> getCurrentUser();
   Future<Either<Failure, AppUser>> signInWithEmailAndPassword(
       {required String email, required String password});
   Future<Either<Failure, AppUser>> signInWithGoogle();

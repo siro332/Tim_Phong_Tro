@@ -9,7 +9,7 @@ abstract class UserInfoState extends Equatable {
 
 class NoData extends UserInfoState {}
 
-class Loading extends UserInfoState {}
+class InfoLoading extends UserInfoState {}
 
 class HaveData extends UserInfoState {
   final AppUserInfo info;

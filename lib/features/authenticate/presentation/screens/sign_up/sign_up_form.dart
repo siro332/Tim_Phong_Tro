@@ -110,14 +110,20 @@ class _SignUpFormState extends State<SignUpForm> {
           setState(() {
             errors.remove(kShortPassError);
           });
+
           return null;
         }
+        setState(() {
+          password = value;
+        });
       },
       validator: (value) {
         if (value!.isEmpty && !errors.contains(kPassNullError)) {
           setState(() {
             errors.add(kPassNullError);
           });
+
+          return null;
         } else if (value.length < 8 &&
             !errors.contains(kShortPassError) &&
             value != "") {
@@ -175,7 +181,9 @@ class _SignUpFormState extends State<SignUpForm> {
             errors.remove(kPassNullError);
           });
         }
-        password = value;
+        setState(() {
+          confirmPassword = value;
+        });
         return null;
       },
       validator: (value) {
@@ -183,10 +191,14 @@ class _SignUpFormState extends State<SignUpForm> {
           setState(() {
             errors.add(kPassNullError);
           });
-        } else if (value != password && !errors.contains(kMatchPassError)) {
+
+          return null;
+        }
+        if (value != password && !errors.contains(kMatchPassError)) {
           setState(() {
             errors.add(kMatchPassError);
           });
+
           return null;
         }
       },
@@ -235,14 +247,20 @@ class _SignUpFormState extends State<SignUpForm> {
           setState(() {
             errors.remove(kInvalidEmailError);
           });
+
           return null;
         }
+        setState(() {
+          email = value;
+        });
       },
       validator: (value) {
         if (value!.isEmpty && !errors.contains(kEmailNullError)) {
           setState(() {
             errors.add(kEmailNullError);
           });
+
+          return null;
         } else if (!emailValidatorRegExp.hasMatch(value) &&
             !errors.contains(kInvalidEmailError) &&
             value != "") {

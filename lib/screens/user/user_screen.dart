@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tim_phong_tro/features/authenticate/presentation/bloc/authentication_bloc.dart';
+import 'package:tim_phong_tro/features/user_info/presentation/bloc/user_info_bloc.dart';
 
 import '../../components/error_alert.dart';
 import '../../constants.dart';
@@ -37,6 +39,8 @@ class _UserScreenState extends State<UserScreen> {
         ),
       ));
     } else if (state is LoggedIn) {
+      BlocProvider.of<UserInfoBloc>(context)
+          .add(GetUserInfoEvent(uid: FirebaseAuth.instance.currentUser!.uid));
       return Body();
     }
     return ErrorAlert(

@@ -5,8 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:tim_phong_tro/features/authenticate/presentation/bloc/authentication_bloc.dart';
 import 'package:tim_phong_tro/features/user_info/presentation/bloc/user_info_bloc.dart';
 import 'package:tim_phong_tro/features/user_info/presentation/screens/user_profile/user_profile_screen.dart';
-import '../../../features/user_info/data/models/const.dart';
-import '../../../models/my_shared_preferences.dart';
 import '../../../components/profile_pic.dart';
 
 class Body extends StatefulWidget {
@@ -31,11 +29,13 @@ class _BodyState extends State<Body> {
               return ProfilePic(
                 image: state.info.image,
                 isEdit: false,
+                uid: FirebaseAuth.instance.currentUser!.uid,
               );
             } else
               return ProfilePic(
                 image: "",
                 isEdit: false,
+                uid: FirebaseAuth.instance.currentUser!.uid,
               );
           }),
           SizedBox(

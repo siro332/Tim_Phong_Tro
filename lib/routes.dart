@@ -1,11 +1,12 @@
 import 'package:flutter/widgets.dart';
-import 'package:tim_phong_tro/screens/huy_ui/search.dart';
 
 import 'features/authenticate/presentation/screens/forgot_password/forgot_password_screen.dart';
 import 'features/authenticate/presentation/screens/sign_in/sign_in_screen.dart';
 import 'features/authenticate/presentation/screens/sign_up/sign_up_screen.dart';
 import 'features/user_info/presentation/screens/complete_user_info/complete_user_info_screen.dart';
+import 'features/user_info/presentation/screens/edit_user_profile/edit_user_profile_screen.dart';
 import 'features/user_info/presentation/screens/user_profile/user_profile_screen.dart';
+import 'features/user_post/presentation/screens/search_screen/search.dart';
 import 'screens/home/home_screen.dart';
 import 'screens/splash/splash_screen.dart';
 
@@ -17,5 +18,6 @@ final Map<String, WidgetBuilder> routes = {
   ForgotPasswordScreen.routeName: (context) => ForgotPasswordScreen(),
   HomeScreen.routeName: (context) => HomeScreen(),
   UserProfileScreen.routeName: (context) => UserProfileScreen(),
-  Search.routeName: (context) => Search(),
+  SearchScreen.routeName: (context) => SearchScreen(),
+  EditUserProfile.routeName: (context) => EditUserProfile(),
 };
