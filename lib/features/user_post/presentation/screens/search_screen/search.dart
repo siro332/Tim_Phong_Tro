@@ -451,7 +451,7 @@ class _SearchScreenState extends State<SearchScreen> {
       searchParams.add(
         new SearchParam(
             orPredicate: "'",
-            key: "roomInfo.address.ward.distric.name",
+            key: "roomInfo.address.ward.district.name",
             operation: ":",
             value: "*" + search + "*"),
       );
