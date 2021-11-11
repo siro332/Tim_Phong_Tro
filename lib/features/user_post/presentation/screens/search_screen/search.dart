@@ -448,6 +448,13 @@ class _SearchScreenState extends State<SearchScreen> {
             operation: ":",
             value: "*" + search + "*"),
       );
+      searchParams.add(
+        new SearchParam(
+            orPredicate: "'",
+            key: "roomInfo.address.ward.distric.name",
+            operation: ":",
+            value: "*" + search + "*"),
+      );
     }
     if (rangeValues.start != 0 && rangeValues.end != 0) {
       searchParams.add(
